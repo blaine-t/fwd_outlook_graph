@@ -1,0 +1,8 @@
+{
+  "authority": "https://login.microsoftonline.com/common",
+  "client_id": "Application (client) ID",
+  "scope": [
+    "https://graph.microsoft.com/.default"
+  ],
+  "endpoint": "https://graph.microsoft.com/v1.0/me/messages"
+}

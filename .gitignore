@@ -130,5 +130,6 @@ dmypy.json
 
 # CUSTOM
 
-# Remove config file since contains sensitive info
-config.py
+# Remove sensitive info
+config.json
+token_cache.bin
