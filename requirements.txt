@@ -1,0 +1,6 @@
+# Download latest packages hopefully without breaking changes and at or after the version used to develop
+
+msal >= 1.23.0, < 2.0.0
+msal-extensions >= 1.0.0, < 2.0.0
+PyJWT >= 2.8.0, < 3.0.0
+requests >= 2.31.0, < 3.0.0
