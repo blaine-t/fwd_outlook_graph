@@ -3,5 +3,6 @@
   "client_id": "Application (client) ID",
   "to_recipients": [
     "email@example.com"
-  ]
+  ],
+  "subscription_url": "https://webhook.azurewebsites.net/api/send/myNotifyClient"
 }

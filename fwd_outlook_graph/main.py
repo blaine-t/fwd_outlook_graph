@@ -18,7 +18,8 @@ You can then run this script:
 from auth import get_access_token
 from cache import get_cache
 from config import load_config
-from request import send_email
+from request import send_email, subscribe
+from sub import app
 
 config_file_path = "config.json"  # Update the file path if the config file is in a different location
 cache_file_path = "token_cache.bin" # Update the file path if the cache is in a different location
@@ -30,8 +31,10 @@ def main():
     config = load_config(config_file_path)
     cache = get_cache(cache_file_path)
     access_token = get_access_token(cache, config)
-    send_email(access_token, config['to_recipients'])
+    subscribe(access_token, config["subscription_url"])
+    # send_email(access_token, config['to_recipients'])
 
 
 if __name__ == '__main__':
     main()
+    app.run(host='0.0.0.0', port=5000)
