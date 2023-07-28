@@ -38,7 +38,6 @@ def handle_sub_post():
     # Handle subscription event
     elif 'application/json' in flask.request.content_type:
         notification = flask.request.get_json()
-        print(notification)
         # Read the notification
         if notification["value"]:
             # Access the list in the notification
@@ -50,7 +49,7 @@ def handle_sub_post():
                             # Retrieve the message ID from the notification
                             message_id = item["resourceData"]["id"]
                             # Now you can fetch the message content using the message_id and forward the email
-                            forward_email(get_access_token(cache, config), message_id, config["to_recipients"])
+                            forward_email(get_access_token(cache, config), message_id, config)
                             # Acknowledge receipt of the notification
                             return "", 204
                         else:

@@ -5,5 +5,9 @@
     "email@example.com"
   ],
   "subscription_url": "https://webhook.azurewebsites.net/api/send/myNotifyClient",
-  "client_state": "aRandom128CharacterStringThatIsUsedToVerifyThatTheRequestCameFromMicrosoftAndNotABadActorThatWantsToAttackYouIRecommendBitwarden"
+  "client_state": "aRandom128CharacterStringThatIsUsedToVerifyThatTheRequestCameFromMicrosoftAndNotABadActorThatWantsToAttackYouIRecommendBitwarden",
+  "transparent_config": {
+    "enabled": true,
+    "catch_all": ".unl@bathost.net"
+  }
 }
