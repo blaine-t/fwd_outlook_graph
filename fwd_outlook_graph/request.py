@@ -4,28 +4,22 @@ import requests
 
 def format_recipient(recipient):
     return {
-        'EmailAddress': {
-            'Address': recipient
+        'emailAddress': {
+            'address': recipient
         }
     }
 
-def send_email(access_token, to_recipients):
+def forward_email(access_token, message_id, to_recipients):
     # Calling graph using the access token
-    url = "https://graph.microsoft.com/v1.0/me/sendMail"
+    url = f'https://graph.microsoft.com/v1.0/me/messages/{message_id}/forward'
     headers = {'Authorization': f'Bearer {access_token}', 'Content-Type': 'application/json'}
     json = {
-        'Message': {
-            'Subject': "TEST EMAIL",
-            'Body': {
-                'ContentType': 'Text',
-                'Content': "TEST BODY"
-            },
-            'ToRecipients': [
+        'Comment': "",
+        'ToRecipients': [
             ]
         }
-        }
     for recipient in to_recipients:
-        json['Message']['ToRecipients'].append(format_recipient(recipient))
+        json['ToRecipients'].append(format_recipient(recipient))
     graph_data = requests.post(url, headers=headers, json=json)
     print("Graph API call result: %s" % graph_data.status_code)
 
