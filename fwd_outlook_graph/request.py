@@ -16,8 +16,8 @@ def handle_recipients(json, config):
 
 
 def get_time_str():
-    time = datetime.datetime.now() + datetime.timedelta(minutes = 4230)
-    return str(time).replace(" ", "T") + "0Z"
+    time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes = 4230)
+    return str(time).replace(" ", "T").replace("+00:00", "0Z")
 
 def get_headers(access_token):
     return {'Authorization': f'Bearer {access_token}'}
