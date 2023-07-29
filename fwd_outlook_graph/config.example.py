@@ -13,6 +13,9 @@ AUTHORITY = "https://login.microsoftonline.com/common"
 CLIENT_ID = "Application-Client-ID-On-Azure"
 # Update the file path if you want the cache file in a different location
 CACHE_FILE_PATH = "token_cache.bin"
+# Scopes if they differ from default. The required scopes are Mail.Read and Mail.Send. If these are not the default then you can declare them here otherwise use .default
+SCOPES = ["https://graph.microsoft.com/.default"]
+# SCOPES = ["https://graph.microsoft.com/Mail.Read", "https://graph.microsoft.com/Mail.Send"]
 
 # ----------------
 # Subscription Settings

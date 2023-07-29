@@ -4,7 +4,7 @@ import sys
 
 import msal
 
-from config import CLIENT_ID, AUTHORITY
+from config import CLIENT_ID, AUTHORITY, SCOPES
 from cache import cache
 
 def get_auth():
@@ -21,14 +21,13 @@ def get_auth():
     # We now check the cache to see if we have some end users signed in before.
     accounts = app.get_accounts()
     if accounts:
-        logging.info("Account(s) exists in cache, probably with token too. Let's try.")
-        # Now let's try to find a token in cache for this account
-        result = app.acquire_token_silent(["https://graph.microsoft.com/.default"], account=accounts[0])
+        # Try and use a cached token
+        # TODO: Fix multi account issues
+        result = app.acquire_token_silent(SCOPES, account=accounts[0])
 
     if not result:
-        logging.info("No suitable token exists in cache. Let's get a new one from AAD.")
-
-        flow = app.initiate_device_flow(scopes=["https://graph.microsoft.com/.default"])
+        # Use device auth if cached token doesn't work
+        flow = app.initiate_device_flow(scopes=SCOPES)
         if "user_code" not in flow:
             raise ValueError(
                 "Fail to create device flow. Err: %s" % json.dumps(flow, indent=4))
