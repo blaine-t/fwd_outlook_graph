@@ -1,10 +1,9 @@
 import json
-import logging
 import sys
 
 import msal
 
-from config import CLIENT_ID, AUTHORITY, SCOPES
+from config import AUTHORITY, CLIENT_ID, SCOPES
 from cache import cache
 
 def get_auth():

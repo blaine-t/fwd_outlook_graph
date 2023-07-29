@@ -4,7 +4,6 @@ import logging
 
 import flask
 
-from auth import get_access_token
 from config import CLIENT_STATE
 from request import forward_email, subscribe, resubscribe, unsubscribe, list_subscriptions
 
@@ -39,7 +38,7 @@ def handle_sub_post():
                             # Retrieve the message ID from the notification
                             message_id = item["resourceData"]["id"]
                             # Now you can fetch the message content using the message_id and forward the email
-                            forward_email(get_access_token(), message_id)
+                            forward_email(message_id)
                             # Acknowledge receipt of the notification
                             return "", 204
                         else:
@@ -48,10 +47,10 @@ def handle_sub_post():
                     elif "lifecycleEvent" in item and item["lifecycleEvent"]:
                         lifecycleEvent = item["lifecycleEvent"]
                         if lifecycleEvent == "reauthorizationRequired":
-                            resubscribe(get_access_token(), item["subscriptionId"])
+                            resubscribe(item["subscriptionId"])
                             return "", 202
                         elif lifecycleEvent == "subscriptionRemoved":
-                            subscribe(get_access_token())
+                            subscribe()
                             return "", 202
                         elif lifecycleEvent == "missed":
                             print("Missing notifications. Possible ratelimit")
@@ -70,22 +69,22 @@ def handle_sub_post():
 
 @app.route("/sub", methods=["GET"])
 def handle_sub_get():
-    subscribe(get_access_token())
+    subscribe()
     return "", 200
 
 @app.route("/unsub", methods=["GET"])
 def handle_unsub():
-    unsubscribe(get_access_token(), flask.request.args['subscriptionId'])
+    unsubscribe(flask.request.args['subscriptionId'])
     return "", 200
 
 @app.route("/resub", methods=["GET"])
 def handle_resub():
-    resubscribe(get_access_token(), flask.request.args['subscriptionId'])
+    resubscribe(flask.request.args['subscriptionId'])
     return "", 200
 
 @app.route("/list", methods=["GET"])
 def handle_list():
-    list_subscriptions(get_access_token())
+    list_subscriptions()
     return "", 200
 
 if __name__ == '__main__':
