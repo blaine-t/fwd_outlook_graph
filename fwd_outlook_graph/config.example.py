@@ -4,7 +4,7 @@
 
 
 # ----------------
-# Azure Settings
+# Auth Settings
 # ----------------
 
 # If you are using a multi-tenant app then the authority can be common. If it is single tenant you will use your tenant ID instead of common
@@ -13,12 +13,19 @@ AUTHORITY = "https://login.microsoftonline.com/common"
 CLIENT_ID = "Application-Client-ID-On-Azure"
 # Username can be used if you only want to allow a specific user to login. I would recommend leaving it on none and then looking at the bin for what the username is before setting it
 USERNAME = None
-# Update the file path if you want the cache file in a different location
-CACHE_FILE_PATH = "token_cache.bin"
 # Scopes if they differ from default. The required scopes are Mail.Read and Mail.Send. If these are not the default then you can declare them here otherwise use .default
 SCOPES = ["https://graph.microsoft.com/.default"]
 # SCOPES = ["https://graph.microsoft.com/Mail.Read", "https://graph.microsoft.com/Mail.Send"]
 
+
+# ----------------
+# Cache Settings
+# ----------------
+
+# Update the file path if you want the cache file in a different location
+CACHE_FILE_PATH = "token_cache.bin"
+# Allow fallback to plain text token cache if your system doesn't support encryption (Mine doesn't even after debugging so I have to use True to fallback)
+FALLBACK_TO_PLAINTEXT = True
 
 # ----------------
 # Subscription Settings

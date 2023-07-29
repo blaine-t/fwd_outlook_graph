@@ -12,6 +12,8 @@ app = msal.PublicClientApplication(
     )
 
 def get_access_token():
+    """Use cache and device flow method as backup to retrieve the Bearer access_token to send with Graph API requests"""
+
     # Create a variable to store the result of auth flow
     result = None
 
@@ -37,7 +39,7 @@ def get_access_token():
             raise ValueError(f"Fail to create device flow. Err: {json.dumps(flow, indent=4)}")
 
         # Prints out the authentications message for the user to login with
-        print(flow["message"])
+        print(flow['message'])
         sys.stdout.flush()  # Some terminals need this to ensure the message is shown
 
         # Poll Microsoft servers to receive the access token
@@ -45,7 +47,6 @@ def get_access_token():
     
     # Handle extracting the access token from the result
     if "access_token" in result:
-        print(f"{result['access_token'][0:5]}...{result['access_token'][-5:]}")
         return result['access_token']
     else:
         print(result.get("error"))

@@ -1,16 +1,19 @@
-import sys
+from msal_extensions import build_encrypted_persistence, FilePersistence, PersistedTokenCache
 
-import msal_extensions
-
-from config import CACHE_FILE_PATH
+from config import CACHE_FILE_PATH, FALLBACK_TO_PLAINTEXT
 
 def build_persistence():
     """Build a suitable persistence instance based your current OS"""
-    if sys.platform.startswith('win'):
-        return msal_extensions.FilePersistenceWithDataProtection(CACHE_FILE_PATH)
-    if sys.platform.startswith('darwin'):
-        return msal_extensions.KeychainPersistence(CACHE_FILE_PATH, "FOG", "FOG")
-    return msal_extensions.FilePersistence(CACHE_FILE_PATH)
+    try:
+        return build_encrypted_persistence(CACHE_FILE_PATH)
+    except:
+        if not FALLBACK_TO_PLAINTEXT:
+            raise
+        # Store persistance unencrypted if FALLBACK_TO_PLAINTEXT is allowed
+        # TESTED with Debian 12 Python 3.11.2
+        return FilePersistence(CACHE_FILE_PATH)
 
 # Export cache to be usable in other parts of script
-cache = msal_extensions.PersistedTokenCache(build_persistence())
+cache = PersistedTokenCache(build_persistence())
+print("Type of persistence: {}".format(cache.__class__.__name__))
+print("Is this persistence encrypted?", cache.is_encrypted)
