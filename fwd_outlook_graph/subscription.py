@@ -3,6 +3,7 @@ import requests
 from config import CLIENT_STATE, SUBSCRIPTION_URL
 from util import get_headers, get_time_str
 
+
 def subscribe():
     """Subscribe to notification when new email is found in users Outlook Inbox"""
     url = "https://graph.microsoft.com/v1.0/subscriptions"
@@ -16,11 +17,12 @@ def subscribe():
     }
 
     response = requests.post(url, headers=get_headers(), json=json)
-    
+
     if response.status_code == 201:
         print(f"New subscription ID: {response.json()['id']}")
     else:
         print(f"[{response.status_code}] Subscription call result: {response.text}")
+
 
 def resubscribe(subscription_id):
     """Resubscribe to notification"""
@@ -30,11 +32,12 @@ def resubscribe(subscription_id):
     }
 
     response = requests.patch(url, headers=get_headers(), json=json)
-    
+
     if response.status_code == 200:
         print(f"Resubscribed ID: {response.json()['id']}")
     else:
         print(f"[{response.status_code}] Resubscription call result: {response.text}")
+
 
 def unsubscribe(subscription_id):
     """Unsubscribe from subscription"""
@@ -46,6 +49,7 @@ def unsubscribe(subscription_id):
         print(f"Successfully unsubscribed: {subscription_id}")
     else:
         print(f"[{response.status_code}] Unsubscription call result: {response.text}")
+
 
 def list_subscriptions():
     """List all current subscriptions"""

@@ -2,6 +2,7 @@ from msal_extensions import build_encrypted_persistence, FilePersistence, Persis
 
 from config import CACHE_FILE_PATH, FALLBACK_TO_PLAINTEXT
 
+
 def build_persistence():
     """Build a suitable persistence instance based your current OS"""
     try:
@@ -13,6 +14,7 @@ def build_persistence():
         # Store persistance unencrypted if FALLBACK_TO_PLAINTEXT is allowed
         # TESTED with Debian 12 Python 3.11.2
         return FilePersistence(CACHE_FILE_PATH)
+
 
 # Export cache to be usable in other parts of script
 cache = PersistedTokenCache(build_persistence())

@@ -10,13 +10,14 @@ from subscription import list_subscriptions, resubscribe, subscribe, unsubscribe
 # Initialize Flask server
 app = flask.Flask(__name__)
 
-# Callback endpoint to process incoming notifications
+
 @app.route('/sub', methods=['POST'])
+# Callback endpoint to process incoming notifications
 def handle_sub_post():
     # Subscription verification confirmation
     if "text/plain" in flask.request.content_type:
         return flask.request.args['validationToken']
-    
+
     # Handle subscription event
     elif "application/json" in flask.request.content_type:
         notification = flask.request.get_json()
@@ -39,7 +40,8 @@ def handle_sub_post():
                             return "", 202
                         else:
                             print("Unexpected odata.type")
-                            print(f"odata.type: {item['resourceData']['@odata.type']}")
+                            print(
+                                f"odata.type: {item['resourceData']['@odata.type']}")
                     elif 'lifecycleEvent' in item and item['lifecycleEvent']:
                         lifecycleEvent = item['lifecycleEvent']
                         # Change to switch statement
@@ -56,7 +58,7 @@ def handle_sub_post():
                         # If known lifecycleEvent return good status
                         return "", 202
                     else:
-                        print ("Unknown changeType")
+                        print("Unknown changeType")
                         print(f"changeType: {item['changeType']}")
                 else:
                     print("Mismatched clientState")
@@ -67,25 +69,30 @@ def handle_sub_post():
         print(f"Notification: {notification}")
         return "", 501
 
+
 @app.route('/sub', methods=['GET'])
 def handle_sub_get():
     subscribe()
     return "", 200
+
 
 @app.route('/unsub', methods=['GET'])
 def handle_unsub():
     unsubscribe(flask.request.args['subscriptionId'])
     return "", 200
 
+
 @app.route('/resub', methods=['GET'])
 def handle_resub():
     resubscribe(flask.request.args['subscriptionId'])
     return "", 200
 
+
 @app.route('/list', methods=['GET'])
 def handle_list():
     list_subscriptions()
     return "", 200
+
 
 if __name__ == "__main__":
     # Get access token to make sure it's cached or the user needs to login again
