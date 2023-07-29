@@ -44,7 +44,7 @@ def handle_sub_post():
             for item in notification["value"]:
                 # Check to make sure the client state matches the one provided
                 if item["clientState"] == config["client_state"]:
-                    if item["changeType"] == "created":
+                    if "changeType" in item and item["changeType"] == "created":
                         if item["resourceData"]["@odata.type"] == "#Microsoft.Graph.Message":
                             # Retrieve the message ID from the notification
                             message_id = item["resourceData"]["id"]
@@ -55,10 +55,20 @@ def handle_sub_post():
                         else:
                             print("Unexpected odata.type")
                             print(f'odata.type: {item["resourceData"]["@odata.type"]}')
-                    elif item["changeType"] == "reauthorizationRequired":
-                        resubscribe()
-                        # Acknowledge receipt of the notification
-                        return "", 204
+                    elif "lifecycleEvent" in item and item["lifecycleEvent"]:
+                        lifecycleEvent = item["lifecycleEvent"]
+                        if lifecycleEvent == "reauthorizationRequired":
+                            resubscribe(get_access_token(cache, config), item["subscriptionId"])
+                            return "", 202
+                        elif lifecycleEvent == "subscriptionRemoved":
+                            subscribe(get_access_token(cache, config), config)
+                            return "", 202
+                        elif lifecycleEvent == "missed":
+                            print("Missing notifications. Possible ratelimit")
+                            # TODO: Delta support
+                            return "", 202
+                        # If unknown lifecycleEvent return error
+                        return "", 501
                     else:
                         print ("Unknown changeType")
                         print(f'changeType: {item["changeType"]}')

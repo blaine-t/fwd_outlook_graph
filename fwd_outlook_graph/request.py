@@ -99,6 +99,7 @@ def subscribe(access_token, config):
     json = {
         "changeType": "created",
         "notificationUrl": config["subscription_url"],
+        "lifecycleNotificationUrl": config["subscription_url"],
         "resource": "me/mailFolders('Inbox')/messages",
         "expirationDateTime": get_time_str(),
         "clientState": config["client_state"]
@@ -116,8 +117,10 @@ def resubscribe(access_token, subscription_id):
         "expirationDateTime": get_time_str()
     }
     resubscribe_data = requests.patch(url, headers=get_headers(access_token), json=json)
-    print("Resubscription call result: %s" % resubscribe_data.text)
-    print(resubscribe_data.status_code)
+    if resubscribe_data.status_code == 200:
+        print(f"Resubscribed ID: {resubscribe_data.json()['id']}")
+    else:
+        print(f"[{resubscribe_data.status_code}] Resubscription call result: {resubscribe_data.text}")
 
 def unsubscribe(access_token, subscription_id):
     # Calling graph using the access token
