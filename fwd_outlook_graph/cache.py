@@ -1,4 +1,5 @@
 import sys
+
 import msal_extensions
 
 def build_persistence(cache_file_path):

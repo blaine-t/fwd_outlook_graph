@@ -2,6 +2,8 @@ import datetime
 
 import requests
 
+from config import ADD_TO_SEND, CATCH_ALL, CLIENT_STATE, SUBSCRIPTION_URL, TO_RECIPIENTS, TRANSPARENT_FORWARD  
+
 def format_recipient(recipient):
     return {
         'emailAddress': {
@@ -9,11 +11,10 @@ def format_recipient(recipient):
         }
     }
 
-def handle_recipients(json, config):
-    for recipient in config['to_recipients']:
+def handle_recipients(json):
+    for recipient in TO_RECIPIENTS:
         json['ToRecipients'].append(format_recipient(recipient))
     return json
-
 
 def get_time_str():
     time = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes = 4230)
@@ -40,7 +41,7 @@ def handle_attachments(json, attachments):
         })
     return json
 
-def send_message(access_token, message, config):
+def send_message(access_token, message):
     url = f'https://graph.microsoft.com/v1.0/me/sendMail'
     json = {
         "message": {
@@ -49,18 +50,18 @@ def send_message(access_token, message, config):
             "toRecipients": [],
             "attachments": []
         },
-        "saveToSentItems": "false"
+        "saveToSentItems": ADD_TO_SEND
     }
     # Handle attachments
     if message['hasAttachments']:
         attachments = get_attachments(access_token, message['id'])
         json = handle_attachments(json, attachments)
-    catch_all = config["transparent_config"]["catch_all"]
+    catch_all = CATCH_ALL
     if catch_all:
         # Add the original sender plus the catch all suffix to the toRecipients
         json["message"]["toRecipients"].append(format_recipient(f"{str(message['sender']['emailAddress']['address']).split('@')[0]}{catch_all}"))
     else:
-        json = handle_recipients(json, config)
+        json = handle_recipients(json)
 
     graph_data = requests.post(url, headers=get_headers(access_token), json=json)
     if graph_data.status_code == 202:
@@ -69,9 +70,9 @@ def send_message(access_token, message, config):
         print(f"[{graph_data.status_code}] Send call result: {graph_data.text}")
     
 
-def forward_email(access_token, message_id, config):
-    if config["transparent_config"]["enabled"]:
-        transparent_forward_email(access_token, message_id, config)
+def forward_email(access_token, message_id):
+    if TRANSPARENT_FORWARD:
+        transparent_forward_email(access_token, message_id)
     else:
         # Calling graph using the access token
         url = f'https://graph.microsoft.com/v1.0/me/messages/{message_id}/forward'
@@ -80,29 +81,29 @@ def forward_email(access_token, message_id, config):
             'ToRecipients': [
                 ]
             }
-        json = handle_recipients(json, config)
+        json = handle_recipients(json)
         graph_data = requests.post(url, headers=get_headers(access_token), json=json)
         if graph_data.status_code == 202:
             print(f"Successfully forwarded: {message_id}")
         else:
             print(f"[{graph_data.status_code}] Forward call result: {graph_data.text}")
 
-def transparent_forward_email(access_token, message_id, config):
+def transparent_forward_email(access_token, message_id):
     # Calling graph using the access token
     message = get_message(access_token, message_id)
-    send_message(access_token, message, config)
+    send_message(access_token, message)
 
-def subscribe(access_token, config):
+def subscribe(access_token):
     # Calling graph using the access token
     url = "https://graph.microsoft.com/v1.0/subscriptions"
     # Add 4230 minutes to the current time to enable the longest subscription expiry GRAPH allows
     json = {
         "changeType": "created",
-        "notificationUrl": config["subscription_url"],
-        "lifecycleNotificationUrl": config["subscription_url"],
+        "notificationUrl": SUBSCRIPTION_URL,
+        "lifecycleNotificationUrl": SUBSCRIPTION_URL,
         "resource": "me/mailFolders('Inbox')/messages",
         "expirationDateTime": get_time_str(),
-        "clientState": config["client_state"]
+        "clientState": CLIENT_STATE
     }
     subscribe_data = requests.post(url, headers=get_headers(access_token), json=json)
     if subscribe_data.status_code == 201:

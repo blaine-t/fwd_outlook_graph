@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
 
-# Other script imports
+import logging
+
+import flask
 
 from auth import get_access_token
 from cache import get_cache
-from config import load_config
+from config import CLIENT_STATE
 from request import forward_email, subscribe, resubscribe, unsubscribe, list_subscriptions
 
-import flask
-import logging
-
-# Update the file path if the cache or config file is in a different location
+# Update the file path if you want the cache file in a different location
 cache_file_path = "token_cache.bin"
-config_file_path = "config.json"
 
 logging.basicConfig(level=logging.INFO)
 # logging.basicConfig(level=logging.DEBUG)
@@ -20,9 +18,8 @@ logging.basicConfig(level=logging.INFO)
 # Initialize Flask server
 app = flask.Flask(__name__)
 
-# Initialize cache and config
+# Initialize cache
 cache = get_cache(cache_file_path)
-config = load_config(config_file_path)
 
 # Callback endpoint to process incoming notifications
 @app.route("/sub", methods=["POST"])
@@ -43,13 +40,13 @@ def handle_sub_post():
             # Access the list in the notification
             for item in notification["value"]:
                 # Check to make sure the client state matches the one provided
-                if item["clientState"] == config["client_state"]:
+                if item["clientState"] == CLIENT_STATE:
                     if "changeType" in item and item["changeType"] == "created":
                         if item["resourceData"]["@odata.type"] == "#Microsoft.Graph.Message":
                             # Retrieve the message ID from the notification
                             message_id = item["resourceData"]["id"]
                             # Now you can fetch the message content using the message_id and forward the email
-                            forward_email(get_access_token(cache, config), message_id, config)
+                            forward_email(get_access_token(cache), message_id)
                             # Acknowledge receipt of the notification
                             return "", 204
                         else:
@@ -58,10 +55,10 @@ def handle_sub_post():
                     elif "lifecycleEvent" in item and item["lifecycleEvent"]:
                         lifecycleEvent = item["lifecycleEvent"]
                         if lifecycleEvent == "reauthorizationRequired":
-                            resubscribe(get_access_token(cache, config), item["subscriptionId"])
+                            resubscribe(get_access_token(cache), item["subscriptionId"])
                             return "", 202
                         elif lifecycleEvent == "subscriptionRemoved":
-                            subscribe(get_access_token(cache, config), config)
+                            subscribe(get_access_token(cache))
                             return "", 202
                         elif lifecycleEvent == "missed":
                             print("Missing notifications. Possible ratelimit")
@@ -80,22 +77,22 @@ def handle_sub_post():
 
 @app.route("/sub", methods=["GET"])
 def handle_sub_get():
-    subscribe(get_access_token(cache, config), config)
+    subscribe(get_access_token(cache,))
     return "", 200
 
 @app.route("/unsub", methods=["GET"])
 def handle_unsub():
-    unsubscribe(get_access_token(cache, config), flask.request.args['subscriptionId'])
+    unsubscribe(get_access_token(cache), flask.request.args['subscriptionId'])
     return "", 200
 
 @app.route("/resub", methods=["GET"])
 def handle_resub():
-    resubscribe(get_access_token(cache, config), flask.request.args['subscriptionId'])
+    resubscribe(get_access_token(cache), flask.request.args['subscriptionId'])
     return "", 200
 
 @app.route("/list", methods=["GET"])
 def handle_list():
-    list_subscriptions(get_access_token(cache, config))
+    list_subscriptions(get_access_token(cache))
     return "", 200
 
 if __name__ == '__main__':

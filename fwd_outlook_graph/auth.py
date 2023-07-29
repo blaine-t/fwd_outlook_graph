@@ -4,10 +4,12 @@ import sys
 
 import msal
 
-def get_auth(cache, config):
+from config import CLIENT_ID, AUTHORITY
+
+def get_auth(cache):
     # Create a preferably long-lived app instance which maintains a token cache.
     app = msal.PublicClientApplication(
-        config["client_id"], authority=config["authority"], token_cache=cache
+        CLIENT_ID, authority=AUTHORITY, token_cache=cache
         )
 
     # The pattern to acquire a token looks like this.
@@ -37,8 +39,8 @@ def get_auth(cache, config):
     
     return result
 
-def get_access_token(cache, config):
-    result = get_auth(cache, config)
+def get_access_token(cache):
+    result = get_auth(cache)
     if "access_token" in result:
         return result['access_token']
     else:
