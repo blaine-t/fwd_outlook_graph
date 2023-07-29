@@ -4,7 +4,8 @@ import flask
 
 from auth import get_access_token
 from config import CLIENT_STATE
-from request import forward_email, list_subscriptions, resubscribe, subscribe, unsubscribe
+from forward import forward_email
+from subscription import list_subscriptions, resubscribe, subscribe, unsubscribe
 
 # Initialize Flask server
 app = flask.Flask(__name__)
