@@ -130,3 +130,14 @@ def unsubscribe(access_token, subscription_id):
         print(f"Successfully unsubscribed: {subscription_id}")
     else:
         print(f"[{unsubscribe_data.status_code}] Unsubscription call result: {unsubscribe_data.text}")
+
+def list_subscriptions(access_token):
+    # Calling graph using the access token
+    url = f'https://graph.microsoft.com/v1.0/subscriptions'
+    response = requests.get(url, headers=get_headers(access_token))
+    if response.status_code == 200:
+        print("Listed IDs:")
+        for sub in response.json()["value"]:
+            print(sub["id"])
+    else:
+        print(f"[{response.status_code}] List call result: {response.text}")

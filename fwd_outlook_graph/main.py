@@ -5,7 +5,7 @@
 from auth import get_access_token
 from cache import get_cache
 from config import load_config
-from request import forward_email, subscribe, resubscribe, unsubscribe
+from request import forward_email, subscribe, resubscribe, unsubscribe, list_subscriptions
 
 import flask
 import logging
@@ -91,6 +91,11 @@ def handle_unsub():
 @app.route("/resub", methods=["GET"])
 def handle_resub():
     resubscribe(get_access_token(cache, config), flask.request.args['subscriptionId'])
+    return "", 200
+
+@app.route("/list", methods=["GET"])
+def handle_list():
+    list_subscriptions(get_access_token(cache, config))
     return "", 200
 
 if __name__ == '__main__':
