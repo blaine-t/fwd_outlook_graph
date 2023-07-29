@@ -27,6 +27,7 @@ CACHE_FILE_PATH = "token_cache.bin"
 # Allow fallback to plain text token cache if your system doesn't support encryption (Mine doesn't even after debugging so I have to use True to fallback)
 FALLBACK_TO_PLAINTEXT = True
 
+
 # ----------------
 # Subscription Settings
 # ----------------

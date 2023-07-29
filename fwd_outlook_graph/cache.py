@@ -5,6 +5,7 @@ from config import CACHE_FILE_PATH, FALLBACK_TO_PLAINTEXT
 def build_persistence():
     """Build a suitable persistence instance based your current OS"""
     try:
+        # UNTESTED
         return build_encrypted_persistence(CACHE_FILE_PATH)
     except:
         if not FALLBACK_TO_PLAINTEXT:
