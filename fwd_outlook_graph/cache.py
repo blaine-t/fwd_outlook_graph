@@ -2,13 +2,15 @@ import sys
 
 import msal_extensions
 
-def build_persistence(cache_file_path):
+from config import CACHE_FILE_PATH
+
+def build_persistence():
     """Build a suitable persistence instance based your current OS"""
     if sys.platform.startswith('win'):
-        return msal_extensions.FilePersistenceWithDataProtection(cache_file_path)
+        return msal_extensions.FilePersistenceWithDataProtection(CACHE_FILE_PATH)
     if sys.platform.startswith('darwin'):
-        return msal_extensions.KeychainPersistence(cache_file_path, "FOG", "FOG")
-    return msal_extensions.FilePersistence(cache_file_path)
+        return msal_extensions.KeychainPersistence(CACHE_FILE_PATH, "FOG", "FOG")
+    return msal_extensions.FilePersistence(CACHE_FILE_PATH)
 
-def get_cache(cache_file_path):
-    return msal_extensions.PersistedTokenCache(build_persistence(cache_file_path))
+# Export cache to be usable in other parts of script
+cache = msal_extensions.PersistedTokenCache(build_persistence())

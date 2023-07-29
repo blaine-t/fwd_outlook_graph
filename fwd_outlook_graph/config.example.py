@@ -11,7 +11,8 @@
 AUTHORITY = "https://login.microsoftonline.com/common"
 # Listed as "Application (client) ID in the Azure App Registration Overview"
 CLIENT_ID = "Application-Client-ID-On-Azure"
-
+# Update the file path if you want the cache file in a different location
+CACHE_FILE_PATH = "token_cache.bin"
 
 # ----------------
 # Subscription Settings
