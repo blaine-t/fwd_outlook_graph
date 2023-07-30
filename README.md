@@ -39,7 +39,7 @@
   <p align="center">
     AKA FOG 
     <br />
-    <a href="https://github.com/blaine-t/fwd_outlook_graph/docs"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/blaine-t/fwd_outlook_graph/tree/main/docs"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/blaine-t/fwd_outlook_graph/issues">Report Bug</a>
@@ -105,7 +105,7 @@ This project is a hobby project of mine to use the Microsoft Graph API to forwar
 
 ### Installation
 
-1. Setup an [Azure App](docs/azure_setup.md)
+1. [Setup an Azure App](docs/azure_setup.md)
 2. Clone the repo
    ```sh
    git clone https://github.com/blaine-t/fwd_outlook_graph.git
@@ -143,7 +143,7 @@ This project is a hobby project of mine to use the Microsoft Graph API to forwar
 Forward emails automatically with extra features like:
 
 * Catch-all email addresses
-* Custom subjects
+* Add or don't to Sent box
 * Multiple forwarding addresses
 
 _For more examples, please refer to the [Documentation](docs/usage.md)_
@@ -168,7 +168,7 @@ _For more examples, please refer to the [Documentation](docs/usage.md)_
 - [X] Move to pure python config
 - [X] Encrypt cache when possible
 - [ ] Improve catch all for more readable emails
-- [ ] Write documentation
+- [X] Write documentation
 - [ ] Improve error handling
 
 See the [open issues](https://github.com/blaine-t/fwd_outlook_graph/issues) for a full list of proposed features (and known issues).
@@ -182,7 +182,7 @@ See the [open issues](https://github.com/blaine-t/fwd_outlook_graph/issues) for 
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an [issue](https://github.com/blaine-t/fwd_outlook_graph/issues) with the tag "enhancement".
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
