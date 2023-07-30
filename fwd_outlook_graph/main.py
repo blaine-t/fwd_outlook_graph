@@ -45,10 +45,9 @@ def handle_sub_post():
                             # Retrieve the message ID from the notification
                             message_id = item['resourceData']['id']
                             # Forward the email using the message_id (Standard forward or Transparent based on config)
-                            forward_email(message_id)
-                            # Acknowledge receipt of the notification
-                            # TODO: Add error coming back through chain
-                            return "", 202
+                            # Acknowledge receipt of the notification or failure to handle the notification
+                            status_code = forward_email(message_id)
+                            return "", status_code
                         else:
                             print("Unexpected odata.type")
                             print(

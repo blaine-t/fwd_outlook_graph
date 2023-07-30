@@ -73,5 +73,7 @@ def forward_email(message_id):
 
         if response.status_code == 202:
             print(f"Successfully forwarded: {message_id}")
+            return 202
         else:
             print(f"[{response.status_code}] Forward result: {response.text}")
+            return 500
