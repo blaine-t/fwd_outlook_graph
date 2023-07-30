@@ -146,7 +146,7 @@ Forward emails automatically with extra features like:
 * Custom subjects
 * Multiple forwarding addresses
 
-_For more examples, please refer to the [Documentation](docs/usage)_
+_For more examples, please refer to the [Documentation](docs/usage.md)_
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -167,6 +167,7 @@ _For more examples, please refer to the [Documentation](docs/usage)_
 - [X] Development tool page
 - [X] Move to pure python config
 - [X] Encrypt cache when possible
+- [ ] Improve catch all for more readable emails
 - [ ] Write documentation
 - [ ] Improve error handling
 
