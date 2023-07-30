@@ -4,6 +4,25 @@
 
 
 # ----------------
+# Proxy Settings
+# ----------------
+
+# If you are behind a proxy you need to comment None and uncomment the PROXY object
+# You need to set the value of how many times the specific X-Forwarded header has been set
+# For example if you are just behind NGINX then 1 on all values is sufficient
+# But if you have Cloudflare and NGINX then you'll want 2 for FOR and PROTO
+# Flask NGINX config: https://flask.palletsprojects.com/en/2.3.x/deploying/nginx/
+# Flask Proxy config: https://flask.palletsprojects.com/en/2.3.x/deploying/proxy_fix/
+# Cloudflare config: https://developers.cloudflare.com/fundamentals/get-started/reference/http-request-headers/
+PROXY = None
+# PROXY = {
+# 'FOR': 1,
+# 'PROTO': 1,
+# 'HOST': 1,
+# 'PREFIX': 1
+# }
+
+# ----------------
 # Auth Settings
 # ----------------
 

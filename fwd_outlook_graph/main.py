@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 
 import flask
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from auth import get_access_token
-from config import CLIENT_STATE
+from config import CLIENT_STATE, PROXY
 from forward import forward_email
 from subscription import list_subscriptions, resubscribe, subscribe, unsubscribe
 
 # Initialize Flask server
 app = flask.Flask(__name__)
+
+# If Flask is behind Reverse Proxy let it know
+if PROXY:
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app, x_for=PROXY['FOR'], x_proto=PROXY['PROTO'], x_host=PROXY['HOST'], x_prefix=PROXY['PREFIX']
+    )
 
 
 @app.route('/sub', methods=['POST'])
