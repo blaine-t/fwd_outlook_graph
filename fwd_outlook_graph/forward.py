@@ -6,13 +6,13 @@ from util import get_headers, handle_attachments, handle_catch_all, handle_to_re
 
 def get_attachments(message_id):
     """Retrieve the list of attachments of a single message"""
-    url = f'https://graph.microsoft.com/v1.0/me/messages/{message_id}/attachments'
+    url = f"https://graph.microsoft.com/v1.0/me/messages/{message_id}/attachments"
     return requests.get(url, headers=get_headers()).json()
 
 
 def get_message(message_id):
     """Retrieve a single message"""
-    url = f'https://graph.microsoft.com/v1.0/me/messages/{message_id}'
+    url = f"https://graph.microsoft.com/v1.0/me/messages/{message_id}"
     return requests.get(url, headers=get_headers()).json()
 
 
@@ -21,21 +21,21 @@ def transparent_forward_email(message_id):
     # Retrieve data from the message
     message = get_message(message_id)
 
-    url = f'https://graph.microsoft.com/v1.0/me/sendMail'
+    url = "https://graph.microsoft.com/v1.0/me/sendMail"
     json = {
-        "message": {
-            "subject": message['subject'],
-            "body": message['body'],
-            "toRecipients": [],
-            "attachments": []
+        'message': {
+            'subject': message['subject'],
+            'body': message['body'],
+            'toRecipients': [],
+            'attachments': []
         },
-        "saveToSentItems": ADD_TO_SEND
+        'saveToSentItems': ADD_TO_SEND
     }
 
     # Handle attachments
     if message['hasAttachments']:
         attachments = get_attachments(message['id'])
-        json = handle_attachments(json, attachments)
+        json['message']['attachments'] = handle_attachments(attachments)
 
     # Handle forwards if TO_RECIPIENTS or CATCH_ALL
     if CATCH_ALL:
@@ -48,7 +48,7 @@ def transparent_forward_email(message_id):
     if response.status_code == 202:
         print(f"Successfully sent: {message['id']}")
     else:
-        print(f"[{response.status_code}] Send call result: {response.text}")
+        print(f"[{response.status_code}] Transparent Forward result: {response.text}")
 
 
 def forward_email(message_id):
@@ -57,11 +57,10 @@ def forward_email(message_id):
         transparent_forward_email(message_id)
     else:
         # Normal Forwarding
-        url = f'https://graph.microsoft.com/v1.0/me/messages/{message_id}/forward'
+        url = f"https://graph.microsoft.com/v1.0/me/messages/{message_id}/forward"
         json = {
             'Comment': "",
-            'toRecipients': [
-            ]
+            'toRecipients': []
         }
 
         # Handle forwards if TO_RECIPIENTS or CATCH_ALL
@@ -75,4 +74,4 @@ def forward_email(message_id):
         if response.status_code == 202:
             print(f"Successfully forwarded: {message_id}")
         else:
-            print(f"[{response.status_code}] Forward call result: {response.text}")
+            print(f"[{response.status_code}] Forward result: {response.text}")

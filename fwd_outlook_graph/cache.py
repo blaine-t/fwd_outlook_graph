@@ -18,5 +18,6 @@ def build_persistence():
 
 # Export cache to be usable in other parts of script
 cache = PersistedTokenCache(build_persistence())
-print("Type of persistence: {}".format(cache.__class__.__name__))
-print("Is this persistence encrypted?", cache.is_encrypted)
+
+print(f"Type of persistence: {cache.__class__.__name__}")
+print(f"Is this persistence encrypted? {cache.is_encrypted}")

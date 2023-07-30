@@ -22,6 +22,7 @@ PROXY = None
 # 'PREFIX': 1
 # }
 
+
 # ----------------
 # Auth Settings
 # ----------------
@@ -30,9 +31,9 @@ PROXY = None
 AUTHORITY = "https://login.microsoftonline.com/common"
 # Listed as "Application (client) ID in the Azure App Registration Overview"
 CLIENT_ID = "Application-Client-ID-On-Azure"
-# Username can be used if you only want to allow a specific user to login. I would recommend leaving it on none and then looking at the bin for what the username is before setting it
+# Username can be used if you only want to allow a specific user to login. I would recommend leaving it on none and then looking at the cache for the username before setting it
 USERNAME = None
-# Scopes if they differ from default. The required scopes are Mail.Read and Mail.Send. If these are not the default then you can declare them here otherwise use .default
+# The required scopes are Mail.Read and Mail.Send. If these are not the default then you can uncomment them otherwise use .default
 SCOPES = ["https://graph.microsoft.com/.default"]
 # SCOPES = ["https://graph.microsoft.com/Mail.Read", "https://graph.microsoft.com/Mail.Send"]
 
@@ -71,5 +72,5 @@ ADD_TO_SEND = False
 # The recipients that you would like to send the mail to. This can be set from 1 address to as many as you want. Used if CATCH_ALL is an empty string.
 TO_RECIPIENTS = ["email@example.com", "email2@example.com"]
 # If you would like to copy the username before the @ in the senders email and append that to a suffix for situations like a catch all inbox set that suffix here
-# If you would not like to use the catch all feature then set it to an empty string and the program will use TO_RECIPIENTS.
+# If you would not like to use the catch all feature then set it to an empty string and the script will use TO_RECIPIENTS.
 CATCH_ALL = ".outlook@example.com"

@@ -1,12 +1,10 @@
-import json
-import sys
-
 import msal
 
 from config import AUTHORITY, CLIENT_ID, SCOPES, USERNAME
 from cache import cache
 
 # Create a preferably long-lived app instance which maintains a token cache.
+# NOTE: THIS IS DIFFERENT THAN THE FLASK APP
 app = msal.PublicClientApplication(
     CLIENT_ID, authority=AUTHORITY, token_cache=cache
 )
@@ -38,20 +36,17 @@ def get_access_token():
         flow = app.initiate_device_flow(scopes=SCOPES)
         if 'user_code' not in flow:
             raise ValueError(
-                f"Fail to create device flow. Err: {json.dumps(flow, indent=4)}")
+                f"Fail to create device flow. Err: {flow}")
 
         # Prints out the authentications message for the user to login with
         print(flow['message'])
-        sys.stdout.flush()  # Some terminals need this to ensure the message is shown
 
         # Poll Microsoft servers to receive the access token
         result = app.acquire_token_by_device_flow(flow)
 
     # Handle extracting the access token from the result
-    if "access_token" in result:
+    if 'access_token' in result:
         return result['access_token']
     else:
-        print(result.get("error"))
-        print(result.get("error_description"))
-        # You may need this when reporting a bug
-        print(result.get("correlation_id"))
+        print("Error when extracting access token:")
+        print(result)

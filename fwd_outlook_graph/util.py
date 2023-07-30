@@ -29,10 +29,10 @@ def format_recipient(recipient):
 
 def handle_to_recipients():
     """Handles to_recipients for traditional formatting and return proper json format"""
-    returnList = []
+    return_list = []
     for recipient in TO_RECIPIENTS:
-        returnList.append(format_recipient(recipient))
-    return returnList
+        return_list.append(format_recipient(recipient))
+    return return_list
 
 
 def handle_catch_all(message):
@@ -40,13 +40,14 @@ def handle_catch_all(message):
     return [format_recipient(f"{str(message['sender']['emailAddress']['address']).split('@')[0]}{CATCH_ALL}")]
 
 
-def handle_attachments(json, attachments):
+def handle_attachments(attachments):
     """Organizes received message attachments into json format to send them outbound"""
+    return_list = []
     for attachment in attachments['value']:
-        json['message']['attachments'].append({
+        return_list.append({
             '@odata.type': attachment['@odata.type'],
             'name': attachment['name'],
             'contentType': attachment['contentType'],
             'contentBytes': attachment['contentBytes']
         })
-    return json
+    return return_list

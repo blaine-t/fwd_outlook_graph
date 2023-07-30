@@ -9,6 +9,7 @@ from forward import forward_email
 from subscription import init_subscriptions, list_subscriptions, resubscribe, subscribe, unsubscribe
 
 # Initialize Flask server
+# NOTE: THIS IS DIFFERENT THAN THE AUTH APP
 app = flask.Flask(__name__)
 
 # If Flask is behind Reverse Proxy let it know
@@ -17,9 +18,8 @@ if PROXY:
         app.wsgi_app, x_for=PROXY['FOR'], x_proto=PROXY['PROTO'], x_host=PROXY['HOST'], x_prefix=PROXY['PREFIX']
     )
 
-# Initialize subscriptions before and in the background of webserver starting
-thread = threading.Thread(target=init_subscriptions)
-thread.start()
+# Initialize subscriptions before and in the background of web server starting
+threading.Thread(target=init_subscriptions).start()
 
 
 @app.route('/sub', methods=['POST'])
@@ -55,7 +55,7 @@ def handle_sub_post():
                                 f"odata.type: {item['resourceData']['@odata.type']}")
                     elif 'lifecycleEvent' in item and item['lifecycleEvent']:
                         lifecycleEvent = item['lifecycleEvent']
-                        # Change to switch statement
+                        # TODO: Change to switch statement
                         if lifecycleEvent == "reauthorizationRequired":
                             resubscribe(item['subscriptionId'])
                         elif lifecycleEvent == "subscriptionRemoved":
@@ -69,8 +69,9 @@ def handle_sub_post():
                         # If known lifecycleEvent return good status
                         return "", 202
                     else:
-                        print("Unknown changeType")
-                        print(f"changeType: {item['changeType']}")
+                        print("Unknown changeType and no lifecycleEvent")
+                        if 'changeType' in item:
+                            print(f"changeType: {item['changeType']}")
                 else:
                     print("Mismatched clientState")
                     print(f"clientState: {item['clientState']}")
