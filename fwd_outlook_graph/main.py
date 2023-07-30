@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 import flask
+import threading
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from auth import get_access_token
 from config import CLIENT_STATE, PROXY
 from forward import forward_email
-from subscription import list_subscriptions, resubscribe, subscribe, unsubscribe
+from subscription import init_subscriptions, list_subscriptions, resubscribe, subscribe, unsubscribe
 
 # Initialize Flask server
 app = flask.Flask(__name__)
@@ -16,6 +16,10 @@ if PROXY:
     app.wsgi_app = ProxyFix(
         app.wsgi_app, x_for=PROXY['FOR'], x_proto=PROXY['PROTO'], x_host=PROXY['HOST'], x_prefix=PROXY['PREFIX']
     )
+
+# Initialize subscriptions before and in the background of webserver starting
+thread = threading.Thread(target=init_subscriptions)
+thread.start()
 
 
 @app.route('/sub', methods=['POST'])
@@ -102,7 +106,7 @@ def handle_list():
 
 
 if __name__ == "__main__":
-    # Get access token to make sure it's cached or the user needs to login again
-    get_access_token()
-    # Host the flask app on port 5000 accessible from any local device
+    # Host the flask app on port 5000 accessible from any local device for development
+    # For production deployment use the command `gunicorn main:app` for quick setup
+    # For more info about production deployment read the README
     app.run(host="0.0.0.0", port=5000)

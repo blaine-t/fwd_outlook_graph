@@ -52,6 +52,7 @@ def transparent_forward_email(message_id):
 
 
 def forward_email(message_id):
+    """Forward normally or transparently based on config"""
     if TRANSPARENT_FORWARD:
         transparent_forward_email(message_id)
     else:

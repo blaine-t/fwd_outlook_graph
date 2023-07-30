@@ -4,6 +4,33 @@ from config import CLIENT_STATE, SUBSCRIPTION_URL
 from util import get_headers, get_time_str
 
 
+def get_subscriptions():
+    """Gets all current subscriptions"""
+    url = f'https://graph.microsoft.com/v1.0/subscriptions'
+    response = requests.get(url, headers=get_headers())
+    if response.status_code == 200:
+        return response.json()['value']
+    else:
+        print(
+            f"[{response.status_code}] Get subscriptions call result: {response.text}")
+
+
+def list_subscriptions():
+    """List all current subscriptions"""
+    print("Listed IDs:")
+    for sub in get_subscriptions():
+        print(sub['id'])
+
+
+def init_subscriptions():
+    """DESTRUCTIVE Initialize program so it can have a sole subscription DESTRUCTIVE"""
+    # Remove all other subscriptions
+    for sub in get_subscriptions():
+        unsubscribe(sub['id'])
+    # Create a single new subscription
+    subscribe()
+
+
 def subscribe():
     """Subscribe to notification when new email is found in users Outlook Inbox"""
     url = "https://graph.microsoft.com/v1.0/subscriptions"
@@ -49,15 +76,3 @@ def unsubscribe(subscription_id):
         print(f"Successfully unsubscribed: {subscription_id}")
     else:
         print(f"[{response.status_code}] Unsubscription call result: {response.text}")
-
-
-def list_subscriptions():
-    """List all current subscriptions"""
-    url = f'https://graph.microsoft.com/v1.0/subscriptions'
-    response = requests.get(url, headers=get_headers())
-    if response.status_code == 200:
-        print("Listed IDs:")
-        for sub in response.json()['value']:
-            print(sub['id'])
-    else:
-        print(f"[{response.status_code}] List call result: {response.text}")
