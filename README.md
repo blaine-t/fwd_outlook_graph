@@ -34,7 +34,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">FOG fwd_outlook_graph</h3>
+<h3 align="center">fwd_outlook_graph</h3>
 
   <p align="center">
     AKA FOG 
@@ -117,7 +117,7 @@ This project is a hobby project of mine to use the Microsoft Graph API to forwar
    source .venv/bin/activate
    python3 -m pip install -r requirements.txt
    ```
-4. Configure [config.py](fwd_outlook_graph/config.py) to your needs
+4. Configure [config.py](fwd_outlook_graph/config.example.py) to your needs
     ```sh
     nano config.py
     ```
@@ -234,10 +234,10 @@ Project Link: [https://github.com/blaine-t/fwd_outlook_graph](https://github.com
 [issues-shield]: https://img.shields.io/github/issues/blaine-t/fwd_outlook_graph.svg?style=for-the-badge
 [issues-url]: https://github.com/blaine-t/fwd_outlook_graph/issues
 [license-shield]: https://img.shields.io/github/license/blaine-t/fwd_outlook_graph.svg?style=for-the-badge
-[license-url]: https://github.com/blaine-t/fwd_outlook_graph/blob/master/LICENSE
+[license-url]: https://github.com/blaine-t/fwd_outlook_graph/blob/main/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/blaine-traudt-832381221
 [Python]: https://img.shields.io/badge/python-ffd343?style=for-the-badge&logo=python
 [Python-url]: https://www.python.org/
-[Flask]: https://img.shields.io/badge/flask-80cbd4?style=for-the-badge&logo=flask&logoColor=ffffff
+[Flask]: https://img.shields.io/badge/flask-60bbc9?style=for-the-badge&logo=flask&logoColor=ffffff
 [Flask-url]: https://flask.palletsprojects.com/en/2.3.x/
