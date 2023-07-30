@@ -11,11 +11,11 @@ def get_headers():
 
 def get_time_str():
     """Gets the expiry time string for new and resubscribing subscriptions"""
-    # Add 4230 minutes to the current time to enable the longest subscription expiry GRAPH allows
-    # TODO: Make robust
+    # Add 4230 minutes to the current UTC time to enable the longest subscription expiry GRAPH allows
     time = datetime.datetime.now(
         datetime.timezone.utc) + datetime.timedelta(minutes=4230)
-    return str(time).replace(" ", "T").replace("+00:00", "0Z")
+    # Return a formatted string to Microsoft's liking
+    return time.strftime("%Y-%m-%dT%H:%M:%S.%f0Z")
 
 
 def format_recipient(recipient):
