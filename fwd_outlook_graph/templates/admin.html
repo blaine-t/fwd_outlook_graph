@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>fwd_outlook_graph</title>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta name="msapplication-TileColor" content="#d00000" />
+  <meta name="theme-color" content="#f5f1e7" />
+  <meta name="apple-mobile-web-app-title" content="fwd_outlook_graph">
+  <meta name="application-name" content="fwd_outlook_graph">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#d00000">
+</head>
+
+<style>
+
+</style>
+
+<body>
+  <div id="main_box">
+    <div id="status_box">
+      <p id="status"></p>
+    </div>
+    <div id="info_box">
+      <label for="name">Name: </label>
+      <p id="name">{{ user.name }}</p>
+      <label for="mail">Email: </label>
+      <p id="mail">{{ user.mail }}</p>
+    </div>
+    <div id="panel_box">
+      <div id="subscriptions_box">
+        <ul id="subscriptions_list">
+          {% for sub in subscriptions %}
+          <li id="{{ sub }}">{{ sub }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div id="control_box">
+        <button onclick="performAction('sub')">Subscribe</button>
+        <button onclick="performAction('list')">Update List</button>
+        <br>
+        <button onclick="performAction('unsub')">Unsubscribe</button>
+        <button onclick="performAction('resub')">Resubscribe</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script type="text/javascript">
+  // Get references to the elements
+  const controlBox = document.getElementById('control_box');
+  let selectedSubscription = null;
+
+  // Function to handle selection of a subscription
+  function handleSubscriptionSelection(subId) {
+    selectedSubscription = subId;
+    controlBox.style.display = 'block';
+  }
+
+  // Attach click event listeners to each subscription list item
+  function addSelectorsToList() {
+    const subscriptionsList = document.querySelectorAll('#subscriptions_box li');
+    subscriptionsList.forEach(subscription => {
+      const subId = subscription.id
+      subscription.addEventListener('click', () => handleSubscriptionSelection(subId));
+    })
+  };
+
+  // Function to handle sending the request for subscriptions and updating with response
+  async function request(url) {
+    response = await fetch(url)
+    if (url == "/list") {
+      const list = document.getElementById('subscriptions_list')
+      list.innerHTML = null
+      for (sub of await response.json()) {
+        const li = document.createElement('li')
+        li.id = sub
+        li.textContent = sub
+        list.appendChild(li)
+      }
+      addSelectorsToList()
+    }
+    else {
+      const status = document.getElementById('status')
+      const response_text = await response.text()
+      console.log(response_text)
+      if (response.ok) {
+        status.textContent = response_text
+      } else {
+        status.textContent = `${url.replace("/", "")} action failed with code ${response.code}`
+      }
+    }
+  }
+
+  // Function to perform the selected action on the selected subscription
+  async function performAction(action) {
+    // TODO: Implement logic to perform the selected action (unsub, sub, resub) on the selected subscription
+    // You can use the selectedSubscription.id and selectedSubscription.status to determine the target subscription
+    // For example, you can make an AJAX request to your server to handle the action
+    console.log(action)
+
+    if (action == "sub") {
+      await request(`/${action}`)
+    } else if (action == "unsub" || action == "resub") {
+      if (selectedSubscription == null) {
+        alert(`Please select a subscription to ${action}`)
+        return
+      }
+      await request(`/${action}?subId=${selectedSubscription}`)
+    }
+    request("/list")
+
+    // Reset the selected subscription
+    selectedSubscription = null;
+  }
+  addSelectorsToList()
+</script>

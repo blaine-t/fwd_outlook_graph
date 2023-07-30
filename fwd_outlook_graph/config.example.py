@@ -2,6 +2,14 @@
 # fwd_outlook_graph Config
 # ================
 
+# ----------------
+# Development Settings
+# ----------------
+
+# VERY IMPORTANT TO HAVE FALSE IF SERVER IS IN PRODUCTION TO AVOID MISUSE
+# When enabled allows certain endpoints and admin panel to work for testing
+DEVELOPMENT = False
+
 
 # ----------------
 # Proxy Settings

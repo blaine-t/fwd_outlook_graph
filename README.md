@@ -119,6 +119,8 @@ This project is a hobby project of mine to use the Microsoft Graph API to forwar
    ```
 4. Configure [config.py](fwd_outlook_graph/config.example.py) to your needs
     ```sh
+    cd fwd_outlook_graph
+    cp config.example.py config.py
     nano config.py
     ```
 6. Run the app
@@ -162,7 +164,7 @@ _For more examples, please refer to the [Documentation](docs/usage)_
 - [X] Add subscriptions
     - [X] lifeCycle support
 - [X] Development tool routes
-- [ ] Development tool page
+- [X] Development tool page
 - [X] Move to pure python config
 - [X] Encrypt cache when possible
 - [ ] Write documentation

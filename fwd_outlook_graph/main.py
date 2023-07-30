@@ -4,9 +4,9 @@ import flask
 import threading
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from config import CLIENT_STATE, PROXY
+from config import CLIENT_STATE, DEVELOPMENT, PROXY
 from forward import forward_email
-from subscription import init_subscriptions, list_subscriptions, resubscribe, subscribe, unsubscribe
+from subscription import init_subscriptions, list_subscriptions, resubscribe, subscribe, unsubscribe, get_user, get_subscriptions
 
 # Initialize Flask server
 # NOTE: THIS IS DIFFERENT THAN THE AUTH APP
@@ -85,28 +85,38 @@ def handle_sub_post():
         return "", 501
 
 
-@app.route('/sub', methods=['GET'])
-def handle_sub_get():
-    subscribe()
-    return "", 200
+if DEVELOPMENT:
+    @app.route('/sub', methods=['GET'])
+    def handle_sub_get():
+        response = subscribe()
+        response_text = response[0]
+        response_code = response[1]
+        return response_text, response_code
 
+    @app.route('/unsub', methods=['GET'])
+    def handle_unsub():
+        response = unsubscribe(flask.request.args['subId'])
+        response_text = response[0]
+        response_code = response[1]
+        return response_text, response_code
 
-@app.route('/unsub', methods=['GET'])
-def handle_unsub():
-    unsubscribe(flask.request.args['subscriptionId'])
-    return "", 200
+    @app.route('/resub', methods=['GET'])
+    def handle_resub():
+        response = resubscribe(flask.request.args['subId'])
+        response_text = response[0]
+        response_code = response[1]
+        return response_text, response_code
 
+    @app.route('/list', methods=['GET'])
+    def handle_list():
+        response = list_subscriptions()
+        response_text = response[0]
+        response_code = response[1]
+        return response_text, response_code
 
-@app.route('/resub', methods=['GET'])
-def handle_resub():
-    resubscribe(flask.request.args['subscriptionId'])
-    return "", 200
-
-
-@app.route('/list', methods=['GET'])
-def handle_list():
-    list_subscriptions()
-    return "", 200
+    @app.route('/admin', methods=['GET'])
+    def handle_admin_get():
+        return flask.render_template('admin.html', subscriptions=list_subscriptions()[0], user=get_user())
 
 
 if __name__ == "__main__":
