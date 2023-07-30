@@ -59,10 +59,14 @@ def handle_sub_post():
                             case "reauthorizationRequired":
                                 resubscribe(item['subscriptionId'])
                             case "subscriptionRemoved":
+                                # Never received subscriptionRemoved so I can't test if this works. Adding a notification print for more info.
+                                print(notification)
                                 subscribe()
                             case "missed":
+                                # Delta support could be added here but I cannot even when I try to force it get a missed lifecycleEvent
+                                # Until I receive one there is no way for me to test an implementation so I will leave this for the future for now
+                                print(notification)
                                 print("Missing notifications. Possible ratelimit")
-                                # TODO: Delta support
                             case _:
                                 # If unknown lifecycleEvent return error
                                 return "", 501
