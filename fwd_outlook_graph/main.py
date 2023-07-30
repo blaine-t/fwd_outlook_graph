@@ -55,17 +55,17 @@ def handle_sub_post():
                                 f"odata.type: {item['resourceData']['@odata.type']}")
                     elif 'lifecycleEvent' in item and item['lifecycleEvent']:
                         lifecycleEvent = item['lifecycleEvent']
-                        # TODO: Change to switch statement
-                        if lifecycleEvent == "reauthorizationRequired":
-                            resubscribe(item['subscriptionId'])
-                        elif lifecycleEvent == "subscriptionRemoved":
-                            subscribe()
-                        elif lifecycleEvent == "missed":
-                            print("Missing notifications. Possible ratelimit")
-                            # TODO: Delta support
-                        else:
-                            # If unknown lifecycleEvent return error
-                            return "", 501
+                        match lifecycleEvent:
+                            case "reauthorizationRequired":
+                                resubscribe(item['subscriptionId'])
+                            case "subscriptionRemoved":
+                                subscribe()
+                            case "missed":
+                                print("Missing notifications. Possible ratelimit")
+                                # TODO: Delta support
+                            case _:
+                                # If unknown lifecycleEvent return error
+                                return "", 501
                         # If known lifecycleEvent return good status
                         return "", 202
                     else:
