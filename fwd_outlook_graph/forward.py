@@ -39,9 +39,9 @@ def transparent_forward_email(message_id):
 
     # Handle forwards if TO_RECIPIENTS or CATCH_ALL
     if CATCH_ALL:
-        json = handle_catch_all(json, get_message(message_id))
+        json['message']['toRecipients'] = handle_catch_all(message)
     else:
-        json = handle_to_recipients(json)
+        json['message']['toRecipients'] = handle_to_recipients()
 
     response = requests.post(url, headers=get_headers(), json=json)
 
@@ -60,15 +60,15 @@ def forward_email(message_id):
         url = f'https://graph.microsoft.com/v1.0/me/messages/{message_id}/forward'
         json = {
             'Comment': "",
-            'ToRecipients': [
+            'toRecipients': [
             ]
         }
 
         # Handle forwards if TO_RECIPIENTS or CATCH_ALL
         if CATCH_ALL:
-            json = handle_catch_all(json, get_message(message_id))
+            json['toRecipients'] = handle_catch_all(get_message(message_id))
         else:
-            json = handle_to_recipients(json)
+            json['toRecipients'] = handle_to_recipients()
 
         response = requests.post(url, headers=get_headers(), json=json)
 
