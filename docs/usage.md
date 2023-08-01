@@ -27,7 +27,7 @@ CATCH_ALL = ""
 
 ## Transparent Forwarding with catch-all
 
-You don't have to deviate from the default config for transparent forwarding with catch-all!
+You don't have to deviate from the default config for transparent forwarding with catch-all! If you want to just have one recipient make sure to just have a list of one string. If you would like the senders domain added to the catch-all make sure to set CATCH_ALL_INCLUDE_DOMAIN True
 
 ## Behind just Cloudflare (NOT RECOMMENDED AS DEFAULT SOLUTIONS DONT HAVE SSL)
 

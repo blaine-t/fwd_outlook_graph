@@ -165,9 +165,10 @@ _For more examples, please refer to the [Documentation](docs/usage.md)_
     - [X] lifeCycle support
 - [X] Development tool routes
 - [X] Development tool page
+  - [ ] Style Development tool page
 - [X] Move to pure python config
 - [X] Encrypt cache when possible
-- [ ] Improve catch all for more readable emails
+- [X] Improve catch all for more readable emails
 - [X] Write documentation
 - [ ] Improve error handling
 

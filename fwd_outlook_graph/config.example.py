@@ -81,4 +81,6 @@ ADD_TO_SEND = False
 TO_RECIPIENTS = ["email@example.com", "email2@example.com"]
 # If you would like to copy the username before the @ in the senders email and append that to a suffix for situations like a catch all inbox set that suffix here
 # If you would not like to use the catch all feature then set it to an empty string and the script will use TO_RECIPIENTS.
-CATCH_ALL = ".outlook@example.com"
+CATCH_ALL = [".outlook@example.com", ".outlookOtherCatchAll@example.org"]
+# If you would like to include the domain of the sender in the catch all append than you can toggle this to True. Most will want this on false.
+CATCH_ALL_INCLUDE_DOMAIN = False
