@@ -20,19 +20,65 @@
 </head>
 
 <style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: grey;
+    font-family: monospace;
+    font-size: x-large;
+  }
 
+  #main_box {
+    display: flex;
+    width: 1000px;
+    height: 500px;
+    background-color: darkgray;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 25px;
+  }
+
+  #panel_box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+
+  #subscriptions_box {
+    display: flex;
+    justify-content: center;
+  }
+
+  #control_box {
+    display: flex;
+    align-items: center;
+  }
+
+  button {
+    width: 90%;
+    height: 50px;
+    margin: 5px;
+    background-color: lightgray;
+    border-radius: 10px;
+  }
+
+  .selected {
+    background-color: lightblue;
+  }
 </style>
 
 <body>
   <div id="main_box">
     <div id="status_box">
-      <p id="status"></p>
+      <p id="status">⠀</p>
     </div>
     <div id="info_box">
-      <label for="name">Name: </label>
-      <p id="name">{{ user.name }}</p>
-      <label for="mail">Email: </label>
-      <p id="mail">{{ user.mail }}</p>
+      <p>Name: {{ user.name }}</p>
+      <p>Email: {{ user.mail }}</p>
     </div>
     <div id="panel_box">
       <div id="subscriptions_box">
@@ -43,11 +89,14 @@
         </ul>
       </div>
       <div id="control_box">
-        <button onclick="performAction('sub')">Subscribe</button>
-        <button onclick="performAction('list')">Update List</button>
-        <br>
-        <button onclick="performAction('unsub')">Unsubscribe</button>
-        <button onclick="performAction('resub')">Resubscribe</button>
+        <div>
+          <button onclick="performAction('sub')">Subscribe</button>
+          <button onclick="performAction('list')">Update List</button>
+        </div>
+        <div>
+          <button onclick="performAction('unsub')">Unsubscribe</button>
+          <button onclick="performAction('resub')">Resubscribe</button>
+        </div>
       </div>
     </div>
   </div>
@@ -61,7 +110,16 @@
   // Function to handle selection of a subscription
   function handleSubscriptionSelection(subId) {
     selectedSubscription = subId;
-    controlBox.style.display = 'block';
+
+    // Remove the 'selected' class from all list items
+    const subscriptionsList = document.querySelectorAll('#subscriptions_box li');
+    subscriptionsList.forEach(subscription => {
+      subscription.classList.remove('selected');
+    });
+
+    // Add the 'selected' class to the selected list item
+    const selectedListItem = document.getElementById(subId);
+    selectedListItem.classList.add('selected');
   }
 
   // Attach click event listeners to each subscription list item
