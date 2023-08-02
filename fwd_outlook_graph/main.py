@@ -8,9 +8,9 @@ from config import CLIENT_STATE, DEVELOPMENT, PROXY
 from forward import forward_email
 from subscription import init_subscriptions, list_subscriptions, resubscribe, subscribe, unsubscribe, get_user, get_subscriptions
 
-# Initialize Flask server
+# Initialize Flask server with static_url_path / to allow for favicon support
 # NOTE: THIS IS DIFFERENT THAN THE AUTH APP
-app = flask.Flask(__name__)
+app = flask.Flask(__name__, static_url_path='/')
 
 # If Flask is behind Reverse Proxy let it know
 if PROXY:
@@ -23,8 +23,8 @@ threading.Thread(target=init_subscriptions).start()
 
 
 @app.route('/sub', methods=['POST'])
-# Callback endpoint to process incoming notifications
 def handle_sub_post():
+    """Handle POST request sent to the server by Microsoft for different subscription notifications"""
     # Subscription verification confirmation
     if "text/plain" in flask.request.content_type:
         return flask.request.args['validationToken']
@@ -85,9 +85,11 @@ def handle_sub_post():
         return "", 501
 
 
+# If application is under development expose admin panel and functions
 if DEVELOPMENT:
     @app.route('/sub', methods=['GET'])
     def handle_sub_get():
+        """Subscribe to new notification when GET /sub"""
         response = subscribe()
         response_text = response[0]
         response_code = response[1]
@@ -95,6 +97,7 @@ if DEVELOPMENT:
 
     @app.route('/unsub', methods=['GET'])
     def handle_unsub():
+        """Unsubscribe to new notification when GET /unsub with a query of the subId"""
         response = unsubscribe(flask.request.args['subId'])
         response_text = response[0]
         response_code = response[1]
@@ -102,6 +105,7 @@ if DEVELOPMENT:
 
     @app.route('/resub', methods=['GET'])
     def handle_resub():
+        """Resubscribe to new notification when GET /resub with a query of the subId"""
         response = resubscribe(flask.request.args['subId'])
         response_text = response[0]
         response_code = response[1]
@@ -109,6 +113,7 @@ if DEVELOPMENT:
 
     @app.route('/list', methods=['GET'])
     def handle_list():
+        """A GET request to /list sends a list of all the current subscriptions for this instance"""
         response = list_subscriptions()
         response_text = response[0]
         response_code = response[1]
@@ -116,7 +121,8 @@ if DEVELOPMENT:
 
     @app.route('/admin', methods=['GET'])
     def handle_admin_get():
-        return flask.render_template('admin.html', subscriptions=list_subscriptions()[0], user=get_user())
+        """Render the admin panel to the user at /admin"""
+        return flask.render_template("admin.html", subscriptions=list_subscriptions()[0], user=get_user())
 
 
 if __name__ == "__main__":
