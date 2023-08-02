@@ -147,22 +147,16 @@
     else {
       const status = document.getElementById('status')
       const response_text = await response.text()
-      console.log(response_text)
       if (response.ok) {
         status.textContent = response_text
       } else {
-        status.textContent = `${url.replace("/", "")} action failed with code ${response.code}`
+        status.textContent = `${url.split("/")[1]} action failed with code ${response.status}`
       }
     }
   }
 
   // Function to perform the selected action on the selected subscription
   async function performAction(action) {
-    // TODO: Implement logic to perform the selected action (unsub, sub, resub) on the selected subscription
-    // You can use the selectedSubscription.id and selectedSubscription.status to determine the target subscription
-    // For example, you can make an AJAX request to your server to handle the action
-    console.log(action)
-
     if (action == "sub") {
       await request(`/${action}`)
     } else if (action == "unsub" || action == "resub") {

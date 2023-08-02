@@ -47,7 +47,6 @@ def handle_catch_all(message):
             prefix_string = str(
                 message['sender']['emailAddress']['address']).split("@")[0]
         return_list.append(format_recipient(prefix_string + address))
-    print(return_list)
     return return_list
 
 

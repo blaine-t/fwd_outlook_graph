@@ -12,8 +12,7 @@ def get_subscriptions():
         return response.json()['value'], response.status_code
     else:
         error_string = f"[{response.status_code}] Get subscriptions result: {response.text}"
-        print(error_string)
-        return {[{'id': error_string}]}, response.status_code
+        return [{'id': error_string}], response.status_code
 
 
 def get_user():
@@ -36,27 +35,39 @@ def get_user():
         }
     return user
 
+# Could implement DRY with this and init_subscriptions but abstracts the functions too much
+
 
 def list_subscriptions():
     """List all current subscriptions"""
-    print("Listed IDs:")
     subscriptions = []
     response = get_subscriptions()
     response_json = response[0]
     response_status = response[1]
+    if response_status != 200:
+        print(
+            f"[{response_status}] Failed to list subscriptions. Result: {response_json}")
+        return [], response_status
     for sub in response_json:
         subscriptions.append(sub['id'])
-        print(sub['id'])
     return subscriptions, response_status
 
 
 def init_subscriptions():
     """DESTRUCTIVE Initialize program so it can have a sole subscription DESTRUCTIVE"""
     # Remove all other subscriptions
-    for sub in get_subscriptions()[0]:
+    response = get_subscriptions()
+    response_json = response[0]
+    response_status = response[1]
+    if response_status != 200:
+        print(
+            f"[{response_status}] Failed to initialize subscriptions. Result: {response_json}")
+        return [], response_status
+    for sub in response_json:
         unsubscribe(sub['id'])
     # Create a single new subscription
     subscribe()
+    print("Initialized subscriptions")
 
 
 def subscribe():

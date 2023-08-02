@@ -60,8 +60,8 @@ FALLBACK_TO_PLAINTEXT = True
 # Subscription Settings
 # ----------------
 
-# The webhook URL you will send to the Graph notification service. This needs to be the same endpoint listed in @app.route("/sub", methods=["POST"]) including the sub. NO ENDING SLASH
-SUBSCRIPTION_URL = "https://example.com/sub"
+# The webhook URL you will send to the Graph notification service. This needs to be the same endpoint listed in @app.route("/sub", methods=["POST"]) including the sub. MUST HAVE ENDING SLASH
+SUBSCRIPTION_URL = "https://example.com/sub/"
 # The secret that is used to confirm that the same application that asked for the notification gets it and that Microsoft is the one posting to /sub and not another actor
 # DO NOT LEAVE THIS DEFAULT. Please use a random string of anything. It can be 1-128 characters. I recommend Bitwarden for generating a random string if you need a tool
 CLIENT_STATE = "aRandom128CharacterStringThatIsUsedToVerifyThatTheRequestCameFromMicrosoftAndNotABadActorThatWantsToAttackYouIRecommendBitwarden"

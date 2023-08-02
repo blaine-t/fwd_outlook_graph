@@ -130,8 +130,10 @@ This project is a hobby project of mine to use the Microsoft Graph API to forwar
     ```
   * Production
     ```sh
-    gunicorn main:app -b 127.0.0.1:5000
+    gunicorn main:app -b 127.0.0.1:5000 --threads 2
     ```
+
+**You need at least 2 threads for Gunicorn if you are going to use the admin panel. Although leaving admin panel enabled in production is not recommended**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -171,7 +173,8 @@ _For more examples, please refer to the [Documentation](docs/usage.md)_
 - [X] Encrypt cache when possible
 - [X] Improve catch all for more readable emails
 - [X] Write documentation
-- [ ] Improve error handling
+- [X] Improve error handling
+- [ ] Missed Delta support (If someone can get this POST let me know because I can't develop for it since I can't get it)
 
 See the [open issues](https://github.com/blaine-t/fwd_outlook_graph/issues) for a full list of proposed features (and known issues).
 

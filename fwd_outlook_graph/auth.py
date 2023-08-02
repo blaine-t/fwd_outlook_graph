@@ -1,7 +1,7 @@
 import msal
 
-from config import AUTHORITY, CLIENT_ID, SCOPES, USERNAME
 from cache import cache
+from config import AUTHORITY, CLIENT_ID, SCOPES, USERNAME
 
 # Create a preferably long-lived app instance which maintains a token cache.
 # NOTE: THIS IS DIFFERENT THAN THE FLASK APP
@@ -48,5 +48,4 @@ def get_access_token():
     if 'access_token' in result:
         return result['access_token']
     else:
-        print("Error when extracting access token:")
-        print(result)
+        print(f"Error when extracting access token: {result}")

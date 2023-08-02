@@ -13,13 +13,20 @@ def get_attachments(message_id):
 def get_message(message_id):
     """Retrieve a single message"""
     url = f"https://graph.microsoft.com/v1.0/me/messages/{message_id}"
-    return requests.get(url, headers=get_headers()).json()
+    return requests.get(url, headers=get_headers())
 
 
 def transparent_forward_email(message_id):
     """Transparent forward a given message"""
     # Retrieve data from the message
-    message = get_message(message_id)
+    messageResponse = get_message(message_id)
+
+    if messageResponse.status_code != 200:
+        print(
+            f"[{messageResponse.status_code}] Transparent Forward Get result: {messageResponse.text}")
+        return 500
+
+    message = messageResponse.json()
 
     url = "https://graph.microsoft.com/v1.0/me/sendMail"
     json = {
@@ -47,14 +54,17 @@ def transparent_forward_email(message_id):
 
     if response.status_code == 202:
         print(f"Successfully sent: {message['id']}")
+        return 202
     else:
-        print(f"[{response.status_code}] Transparent Forward result: {response.text}")
+        print(
+            f"[{response.status_code}] Transparent Forward Send result: {response.text}")
+        return 500
 
 
 def forward_email(message_id):
     """Forward normally or transparently based on config"""
     if TRANSPARENT_FORWARD:
-        transparent_forward_email(message_id)
+        return transparent_forward_email(message_id)
     else:
         # Normal Forwarding
         url = f"https://graph.microsoft.com/v1.0/me/messages/{message_id}/forward"
