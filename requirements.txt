@@ -1,6 +1,7 @@
 # Download latest packages hopefully without breaking changes and at or after the version used to develop
-flask >= 2.3.2, < 3.0.0
-gunicorn >= 22.0.0, < 23.0.0
-msal >= 1.23.0, < 2.0.0
-msal-extensions >= 1.0.0, < 2.0.0
-requests >= 2.31.0, < 3.0.0
+# NEW: Check git history for the version used to develop. New ones are updated to new major versions at 2024-10-08
+flask >= 3.0.3, < 4.0.0
+gunicorn >= 23.0.0, < 24.0.0
+msal >= 1.31.0, < 2.0.0
+msal-extensions >= 1.2.0, < 2.0.0
+requests >= 2.32.3, < 3.0.0
