@@ -176,6 +176,8 @@ _For more examples, please refer to the [Documentation](docs/usage.md)_
 - [X] Improve error handling
 - [ ] Add spam filtering
 - [ ] Prevent undeliverable loops
+- [ ] Keep track of already sent IDs
+- [ ] Alert when no emails recieved in X time
 - [ ] Missed Delta support (If someone can get this POST let me know because I can't develop for it since I can't get it)
 
 See the [open issues](https://github.com/blaine-t/fwd_outlook_graph/issues) for a full list of proposed features (and known issues).
